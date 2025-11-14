@@ -1,8 +1,8 @@
-namespace Domain.Driven.Design.Tests.Unit.Constants;
+namespace Domain.Driven.Design.Tests.Unit;
 
 public static partial class Constants
 {
-    public static class Trainer
+    public static class Participant
     {
         public static readonly Guid Id = Guid.NewGuid();
     }

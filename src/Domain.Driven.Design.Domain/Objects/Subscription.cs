@@ -1,4 +1,4 @@
-namespace Domain.Driven.Design.Domain;
+namespace Domain.Driven.Design.Domain.Objects;
 
 public class Subscription
 {
