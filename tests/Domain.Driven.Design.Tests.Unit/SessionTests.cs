@@ -1,3 +1,4 @@
+using static Domain.Driven.Design.Domain.Constants.ErrorCodes;
 using Domain.Driven.Design.Tests.Unit.Factories;
 using Domain.Driven.Design.Tests.Unit.Services;
 using FluentAssertions;
@@ -18,13 +19,15 @@ public class SessionTests
 
         // act
         // add participant one
-        session.ReserveSpot(participant1);
+        var reservationResult1 = session.ReserveSpot(participant1);
         // add participant two
-        var action = () => session.ReserveSpot(participant2);
+        var reservationResult2 = session.ReserveSpot(participant2);
 
         // assert
         // participant two reservation failed
-        action.Should().Throw<InvalidOperationException>();
+        reservationResult1.IsError.Should().BeFalse();
+        reservationResult2.IsError.Should().BeTrue();
+        reservationResult2.FirstError.Code.Should().Be(nameof(MaximumNumberOfParticipantsReached));
     }
 
     [Fact]
@@ -45,10 +48,11 @@ public class SessionTests
 
         // act
         // cancel the reservation less than 24 hours before the session
-        var action = () => session.CancelReservation(participant, dateTimeProvider);
+        var result = session.CancelReservation(participant, dateTimeProvider);
 
         // assert
         // the cancellation fails
-        action.Should().Throw<InvalidOperationException>();
+        result.IsError.Should().BeTrue();
+        result.FirstError.Code.Should().Be(nameof(CancellationIsTooCloseToSession));
     }
 }

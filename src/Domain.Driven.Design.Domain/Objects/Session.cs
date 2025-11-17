@@ -1,4 +1,5 @@
 using Domain.Driven.Design.Domain.Interfaces;
+using ErrorOr;
 
 namespace Domain.Driven.Design.Domain.Objects;
 
@@ -13,25 +14,33 @@ public class Session(
     private readonly List<Guid> _participantIds = [];
     private readonly Guid _id = id ?? Guid.NewGuid();
 
-    public void ReserveSpot(Participant participant)
+    public ErrorOr<Success> ReserveSpot(Participant participant)
     {
         if (_participantIds.Count >= maxParticipants)
         {
-            throw new InvalidOperationException("Maximum number of participants reached");
+            return Error.Validation(
+                code: nameof(Constants.ErrorCodes.MaximumNumberOfParticipantsReached),
+                description: Constants.ErrorCodes.MaximumNumberOfParticipantsReached);
         }
         _participantIds.Add(participant.Id);
+        return Result.Success;
     }
 
-    public void CancelReservation(Participant participant, IDateTimeProvider dateTimeProvider)
+    public ErrorOr<Success> CancelReservation(Participant participant, IDateTimeProvider dateTimeProvider)
     {
         if (IsTooCloseToSession(dateTimeProvider.UtcNow))
         {
-            throw new InvalidOperationException("Cancellation is too close to session");
+            return Error.Validation(
+                code: nameof(Constants.ErrorCodes.CancellationIsTooCloseToSession),
+                description: Constants.ErrorCodes.CancellationIsTooCloseToSession);
         }
         if (!_participantIds.Remove(participant.Id))
         {
-            throw new  InvalidOperationException("Reservation not found");
+            return Error.Validation(
+                code: nameof(Constants.ErrorCodes.ReservationNotFound),
+                description: Constants.ErrorCodes.ReservationNotFound);
         }
+        return Result.Success;
     }
 
     private bool IsTooCloseToSession(DateTime utcNow)
