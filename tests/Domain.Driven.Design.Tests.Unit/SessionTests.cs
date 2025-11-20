@@ -1,6 +1,6 @@
-using static Domain.Driven.Design.Domain.Constants.ErrorCodes;
 using Domain.Driven.Design.Tests.Unit.Factories;
 using Domain.Driven.Design.Tests.Unit.Services;
+using Domain.Driven.Design.Domain.Errors;
 using FluentAssertions;
 
 namespace Domain.Driven.Design.Tests.Unit;
@@ -11,48 +11,40 @@ public class SessionTests
     public void ReserveSpot_WhenNoMoreRoom_ShouldFailReservation()
     {
         // arrange
-        // create a session with a maximum of one participant
         var session = SessionFactory.CreateSession(maxParticipants: 1);
-        // create two participants
-        var participant1 = ParticipantFactory.CreateParticipant(userId: Guid.NewGuid(), id: Guid.NewGuid());
-        var participant2 = ParticipantFactory.CreateParticipant(userId: Guid.NewGuid(), id: Guid.NewGuid());
+        var participant1 = ParticipantFactory.CreateParticipant(id: Guid.NewGuid(), userId: Guid.NewGuid());
+        var participant2 = ParticipantFactory.CreateParticipant(id: Guid.NewGuid(), userId: Guid.NewGuid());
 
         // act
-        // add participant one
-        var reservationResult1 = session.ReserveSpot(participant1);
-        // add participant two
-        var reservationResult2 = session.ReserveSpot(participant2);
+        var reserveParticipant1Result = session.ReserveSpot(participant1);
+        var reserveParticipant2Result = session.ReserveSpot(participant2);
 
         // assert
-        // participant two reservation failed
-        reservationResult1.IsError.Should().BeFalse();
-        reservationResult2.IsError.Should().BeTrue();
-        reservationResult2.FirstError.Code.Should().Be(nameof(MaximumNumberOfParticipantsReached));
+        reserveParticipant1Result.IsError.Should().BeFalse();
+        reserveParticipant2Result.IsError.Should().BeTrue();
+        reserveParticipant2Result.FirstError.Should().Be(SessionErrors.CannotHaveMoreReservationsThanParticipants);
     }
 
     [Fact]
-    public void CancellingReservation_WhenCancellationIsTooCloseToSession_ShouldFailCancellation()
+    public void CancelReservation_WhenCancellationIsTooCloseToSession_ShouldFailCancellation()
     {
-        // arrange
-        // create a session
+        // Arrange
         var session = SessionFactory.CreateSession(
             date: Constants.Session.Date,
-            startTime: Constants.Session.StartTime,
-            endTime: Constants.Session.EndTime);
-        // create a participant
-        var participant = ParticipantFactory.CreateParticipant(userId: Guid.NewGuid(), id: Guid.NewGuid());
-        // reserve a spot for the participant in the session
-        session.ReserveSpot(participant);
-        // create a dateTimeProvider
-        var dateTimeProvider = new TestDateTimeProvider(Constants.Session.Date.ToDateTime(TimeOnly.MinValue));
+            time: Constants.Session.Time);
+
+        var participant = ParticipantFactory.CreateParticipant();
+        var cancellationDateTime = Constants.Session.Date.ToDateTime(TimeOnly.MinValue);
 
         // act
-        // cancel the reservation less than 24 hours before the session
-        var result = session.CancelReservation(participant, dateTimeProvider);
+        var reserveSpotResult = session.ReserveSpot(participant);
+        var cancelReservationResult = session.CancelReservation(
+            participant,
+            new TestDateTimeProvider(fixedDateTime: cancellationDateTime));
 
         // assert
-        // the cancellation fails
-        result.IsError.Should().BeTrue();
-        result.FirstError.Code.Should().Be(nameof(CancellationIsTooCloseToSession));
+        reserveSpotResult.IsError.Should().BeFalse();
+        cancelReservationResult.IsError.Should().BeTrue();
+        cancelReservationResult.FirstError.Should().Be(SessionErrors.CannotCancelReservationTooCloseToSession);
     }
 }

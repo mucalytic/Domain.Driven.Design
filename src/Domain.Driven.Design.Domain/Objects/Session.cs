@@ -1,44 +1,27 @@
+using Domain.Driven.Design.Domain.Errors;
 using Domain.Driven.Design.Domain.Interfaces;
 using ErrorOr;
 
 namespace Domain.Driven.Design.Domain.Objects;
 
-public class Session(
-    DateOnly date,
-    TimeOnly startTime,
-    TimeOnly endTime,
-    int maxParticipants,
-    Guid trainerId,
-    Guid? id = null)
+public class Session(DateOnly date, TimeRange time, int maxParticipants, Guid trainerId, Guid? id = null)
 {
+    private readonly Guid _trainerId = trainerId;
     private readonly List<Guid> _participantIds = [];
-    private readonly Guid _id = id ?? Guid.NewGuid();
 
-    public ErrorOr<Success> ReserveSpot(Participant participant)
-    {
-        if (_participantIds.Count >= maxParticipants)
-        {
-            return Error.Validation(
-                code: nameof(Constants.ErrorCodes.MaximumNumberOfParticipantsReached),
-                description: Constants.ErrorCodes.MaximumNumberOfParticipantsReached);
-        }
-        _participantIds.Add(participant.Id);
-        return Result.Success;
-    }
+    public Guid Id        { get; } = id ?? Guid.NewGuid();
+    public DateOnly Date  { get; } = date;
+    public TimeRange Time { get; } = time;
 
     public ErrorOr<Success> CancelReservation(Participant participant, IDateTimeProvider dateTimeProvider)
     {
         if (IsTooCloseToSession(dateTimeProvider.UtcNow))
         {
-            return Error.Validation(
-                code: nameof(Constants.ErrorCodes.CancellationIsTooCloseToSession),
-                description: Constants.ErrorCodes.CancellationIsTooCloseToSession);
+            return SessionErrors.CannotCancelReservationTooCloseToSession;
         }
         if (!_participantIds.Remove(participant.Id))
         {
-            return Error.Validation(
-                code: nameof(Constants.ErrorCodes.ReservationNotFound),
-                description: Constants.ErrorCodes.ReservationNotFound);
+            return Error.NotFound(description: "Participant not found");
         }
         return Result.Success;
     }
@@ -46,7 +29,20 @@ public class Session(
     private bool IsTooCloseToSession(DateTime utcNow)
     {
         const int minHours = 24;
-        // session time - current time < 24 hours
-        return (date.ToDateTime(startTime) - utcNow).TotalHours < minHours;
+        return (Date.ToDateTime(Time.Start) - utcNow).TotalHours < minHours;
+    }
+
+    public ErrorOr<Success> ReserveSpot(Participant participant)
+    {
+        if (_participantIds.Count >= maxParticipants)
+        {
+            return SessionErrors.CannotHaveMoreReservationsThanParticipants;
+        }
+        if (_participantIds.Contains(participant.Id))
+        {
+            return Error.Conflict(description: "Participants cannot reserve twice to the same session");
+        }
+        _participantIds.Add(participant.Id);
+        return Result.Success;
     }
 }
