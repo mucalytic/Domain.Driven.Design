@@ -1,21 +1,12 @@
+using Domain.Driven.Design.Domain.Objects;
+using Domain.Driven.Design.Domain.Common;
 using ErrorOr;
 
-namespace Domain.Driven.Design.Domain.Objects;
+namespace Domain.Driven.Design.Domain.Entities;
 
-public class Schedule
+public class Schedule(Dictionary<DateOnly, List<TimeRange>>? calendar = null, Guid? id = null) :  Entity<Guid>(id ?? Guid.NewGuid())
 {
-    private readonly Dictionary<DateOnly, List<TimeRange>> _calendar = new();
-    private readonly Guid _id;
-
-    private Schedule() { }
-
-    public Schedule(
-        Dictionary<DateOnly, List<TimeRange>>? calendar = null,
-        Guid? id = null)
-    {
-        _calendar = calendar ?? new Dictionary<DateOnly, List<TimeRange>>();
-        _id = id ?? Guid.NewGuid();
-    }
+    private readonly Dictionary<DateOnly, List<TimeRange>> _calendar = calendar ?? new Dictionary<DateOnly, List<TimeRange>>();
 
     public static Schedule Empty() => new(id: Guid.NewGuid());
 

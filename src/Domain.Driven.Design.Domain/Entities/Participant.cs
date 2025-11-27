@@ -1,14 +1,13 @@
+using Domain.Driven.Design.Domain.Common;
 using Domain.Driven.Design.Domain.Errors;
 using ErrorOr;
 
-namespace Domain.Driven.Design.Domain.Objects;
+namespace Domain.Driven.Design.Domain.Entities;
 
-public class Participant(Guid userId, Guid? id = null)
+public class Participant(Guid userId, Guid? id = null) : Entity<Guid>(id ?? Guid.NewGuid())
 {
     private readonly Schedule _schedule = Schedule.Empty();
     private readonly List<Guid> _sessionIds = [];
-
-    public Guid Id { get; } = id ?? Guid.NewGuid();
 
     public ErrorOr<Success> AddToSchedule(Session session)
     {

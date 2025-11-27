@@ -1,26 +1,15 @@
+using Domain.Driven.Design.Domain.Objects;
+using Domain.Driven.Design.Domain.Common;
 using Domain.Driven.Design.Domain.Errors;
 using ErrorOr;
 
-namespace Domain.Driven.Design.Domain.Objects;
+namespace Domain.Driven.Design.Domain.Entities;
 
-public class Subscription
+public class Subscription(SubscriptionType subscriptionType, Guid adminId, Guid? id = null) : Entity<Guid>(id ?? Guid.NewGuid())
 {
-    private readonly Guid _id;
+    private readonly SubscriptionType _subscriptionType =  subscriptionType;
+    private readonly Guid _adminId = adminId;
     private readonly List<Guid> _gymIds = [];
-    private readonly SubscriptionType _subscriptionType;
-    private readonly int _maxGyms;
-    private readonly Guid _adminId;
-
-    public Subscription(
-        SubscriptionType subscriptionType,
-        Guid adminId,
-        Guid? id = null)
-    {
-        _subscriptionType = subscriptionType;
-        _maxGyms = GetMaxGyms();
-        _adminId = adminId;
-        _id = id ?? Guid.NewGuid();
-    }
 
     public int GetMaxGyms() => _subscriptionType.Name switch
     {
@@ -52,7 +41,7 @@ public class Subscription
         {
             return Error.Conflict(description: "Gym already exists");
         }
-        if (_gymIds.Count >= _maxGyms)
+        if (_gymIds.Count >= GetMaxGyms())
         {
             return SubscriptionErrors.CannotHaveMoreGymsThanSubscriptionAllows;
         }

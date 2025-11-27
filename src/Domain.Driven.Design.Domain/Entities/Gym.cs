@@ -1,13 +1,12 @@
+using Domain.Driven.Design.Domain.Common;
 using Domain.Driven.Design.Domain.Errors;
 using ErrorOr;
 
-namespace Domain.Driven.Design.Domain.Objects;
+namespace Domain.Driven.Design.Domain.Entities;
 
-public class Gym(int maxRooms, Guid subscriptionId, Guid? id = null)
+public class Gym(int maxRooms, Guid subscriptionId, Guid? id = null) : Entity<Guid>(id ?? Guid.NewGuid())
 {
     private readonly List<Guid> _roomIds = [];
-
-    public Guid Id { get; } = id ?? Guid.NewGuid();
 
     public ErrorOr<Success> AddRoom(Room room)
     {

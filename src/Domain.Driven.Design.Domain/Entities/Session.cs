@@ -1,15 +1,16 @@
-using Domain.Driven.Design.Domain.Errors;
 using Domain.Driven.Design.Domain.Interfaces;
+using Domain.Driven.Design.Domain.Objects;
+using Domain.Driven.Design.Domain.Common;
+using Domain.Driven.Design.Domain.Errors;
 using ErrorOr;
 
-namespace Domain.Driven.Design.Domain.Objects;
+namespace Domain.Driven.Design.Domain.Entities;
 
-public class Session(DateOnly date, TimeRange time, int maxParticipants, Guid trainerId, Guid? id = null)
+public class Session(DateOnly date, TimeRange time, int maxParticipants, Guid trainerId, Guid? id = null) : Entity<Guid>(id ?? Guid.NewGuid())
 {
-    private readonly Guid _trainerId = trainerId;
     private readonly List<Guid> _participantIds = [];
+    private readonly Guid _trainerId = trainerId;
 
-    public Guid Id        { get; } = id ?? Guid.NewGuid();
     public DateOnly Date  { get; } = date;
     public TimeRange Time { get; } = time;
 
