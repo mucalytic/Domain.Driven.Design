@@ -1,5 +1,5 @@
+using Domain.Driven.Design.Domain.ValueObjects;
 using Domain.Driven.Design.Domain.Entities;
-using Domain.Driven.Design.Domain.Objects;
 
 namespace Domain.Driven.Design.Tests.Unit.Factories;
 

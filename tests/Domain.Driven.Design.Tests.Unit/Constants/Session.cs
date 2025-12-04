@@ -1,4 +1,4 @@
-using Domain.Driven.Design.Domain.Objects;
+using Domain.Driven.Design.Domain.ValueObjects;
 
 namespace Domain.Driven.Design.Tests.Unit.Constants;
 
