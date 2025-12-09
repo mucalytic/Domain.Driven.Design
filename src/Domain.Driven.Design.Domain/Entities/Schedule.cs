@@ -4,7 +4,7 @@ using ErrorOr;
 
 namespace Domain.Driven.Design.Domain.Entities;
 
-public class Schedule(Dictionary<DateOnly, List<TimeRange>>? calendar = null, Guid? id = null) :  Entity<Guid>(id ?? Guid.NewGuid())
+public class Schedule(Dictionary<DateOnly, List<TimeRange>>? calendar = null, Guid? id = null) : GuidEntity(id)
 {
     private readonly Dictionary<DateOnly, List<TimeRange>> _calendar = calendar ?? new Dictionary<DateOnly, List<TimeRange>>();
 

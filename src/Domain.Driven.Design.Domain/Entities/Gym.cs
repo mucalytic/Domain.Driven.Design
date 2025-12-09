@@ -4,7 +4,7 @@ using ErrorOr;
 
 namespace Domain.Driven.Design.Domain.Entities;
 
-public class Gym(int maxRooms, Guid subscriptionId, Guid? id = null) : Entity<Guid>(id ?? Guid.NewGuid())
+public class Gym(int maxRooms, Guid subscriptionId, Guid? id = null) : GuidEntity(id)
 {
     private readonly List<Guid> _roomIds = [];
 

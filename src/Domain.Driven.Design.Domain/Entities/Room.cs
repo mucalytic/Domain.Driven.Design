@@ -4,7 +4,7 @@ using ErrorOr;
 
 namespace Domain.Driven.Design.Domain.Entities;
 
-public class Room(int maxDailySessions, Guid gymId, Schedule? schedule = null, Guid? id = null) : Entity<Guid>(id ?? Guid.NewGuid())
+public class Room(int maxDailySessions, Guid gymId, Schedule? schedule = null, Guid? id = null) : GuidEntity(id)
 {
     private readonly List<Guid> _sessionIds = [];
     private readonly Schedule _schedule = schedule ?? Schedule.Empty();

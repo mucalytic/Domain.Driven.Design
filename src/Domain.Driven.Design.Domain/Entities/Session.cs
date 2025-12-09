@@ -6,7 +6,7 @@ using ErrorOr;
 
 namespace Domain.Driven.Design.Domain.Entities;
 
-public class Session(DateOnly date, TimeRange time, int maxParticipants, Guid trainerId, Guid? id = null) : Entity<Guid>(id ?? Guid.NewGuid())
+public class Session(DateOnly date, TimeRange time, int maxParticipants, Guid trainerId, Guid? id = null) : GuidEntity(id)
 {
     private readonly List<Guid> _participantIds = [];
     private readonly Guid _trainerId = trainerId;

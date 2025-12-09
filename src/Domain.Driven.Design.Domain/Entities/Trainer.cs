@@ -4,7 +4,7 @@ using ErrorOr;
 
 namespace Domain.Driven.Design.Domain.Entities;
 
-public class Trainer(Guid userId, Schedule? schedule = null, Guid? id = null) : Entity<Guid>(id ?? Guid.NewGuid())
+public class Trainer(Guid userId, Schedule? schedule = null, Guid? id = null) : GuidEntity(id)
 {
     private readonly Schedule _schedule = schedule ?? Schedule.Empty();
     private readonly List<Guid> _sessionIds = [];

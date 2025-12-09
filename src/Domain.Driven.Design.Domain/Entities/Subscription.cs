@@ -5,7 +5,7 @@ using ErrorOr;
 
 namespace Domain.Driven.Design.Domain.Entities;
 
-public class Subscription(SubscriptionType subscriptionType, Guid adminId, Guid? id = null) : Entity<Guid>(id ?? Guid.NewGuid())
+public class Subscription(SubscriptionType subscriptionType, Guid adminId, Guid? id = null) : GuidEntity(id)
 {
     private readonly SubscriptionType _subscriptionType =  subscriptionType;
     private readonly Guid _adminId = adminId;
