@@ -11,10 +11,7 @@ public class TimeRange(TimeOnly start, TimeOnly end) : ValueObject<TimeRange>
 
     public static ErrorOr<TimeRange> FromDateTimes(DateTime start, DateTime end)
     {
-        if (start.Date != end.Date || start >= end)
-        {
-            return Error.Validation();
-        }
+        if (start.Date != end.Date || start >= end) return Error.Validation();
         return new TimeRange(TimeOnly.FromDateTime(start), TimeOnly.FromDateTime(end));
     }
 

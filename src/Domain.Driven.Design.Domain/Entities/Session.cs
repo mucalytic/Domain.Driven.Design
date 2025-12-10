@@ -8,7 +8,7 @@ namespace Domain.Driven.Design.Domain.Entities;
 
 public class Session(DateOnly date, TimeRange time, int maxParticipants, Guid trainerId, Guid? id = null) : GuidEntity(id)
 {
-    private readonly List<Guid> _participantIds = [];
+    private readonly List<Reservation> _reservations = [];
     private readonly Guid _trainerId = trainerId;
 
     public DateOnly Date  { get; } = date;
@@ -20,10 +20,12 @@ public class Session(DateOnly date, TimeRange time, int maxParticipants, Guid tr
         {
             return SessionErrors.CannotCancelReservationTooCloseToSession;
         }
-        if (!_participantIds.Remove(participant.Id))
+        var reservation = _reservations.Find(r => r.ParticipantId == participant.Id);
+        if (reservation is null)
         {
             return Error.NotFound(description: "Participant not found");
         }
+        _reservations.Remove(reservation);
         return Result.Success;
     }
 
@@ -35,15 +37,15 @@ public class Session(DateOnly date, TimeRange time, int maxParticipants, Guid tr
 
     public ErrorOr<Success> ReserveSpot(Participant participant)
     {
-        if (_participantIds.Count >= maxParticipants)
+        if (_reservations.Count >= maxParticipants)
         {
             return SessionErrors.CannotHaveMoreReservationsThanParticipants;
         }
-        if (_participantIds.Contains(participant.Id))
+        if (_reservations.Any(r => r.ParticipantId == participant.Id))
         {
             return Error.Conflict(description: "Participants cannot reserve twice to the same session");
         }
-        _participantIds.Add(participant.Id);
+        _reservations.Add(new Reservation(participant.Id));
         return Result.Success;
     }
 }
