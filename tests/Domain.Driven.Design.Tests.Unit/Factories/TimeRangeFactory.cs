@@ -1,4 +1,4 @@
-using Domain.Driven.Design.Domain.ValueObjects;
+using Domain.Driven.Design.Domain.Common.ValueObjects;
 using Throw;
 
 namespace Domain.Driven.Design.Tests.Unit.Factories;

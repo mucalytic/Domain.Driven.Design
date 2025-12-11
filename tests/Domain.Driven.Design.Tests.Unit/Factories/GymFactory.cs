@@ -1,4 +1,4 @@
-using Domain.Driven.Design.Domain.Entities;
+using Domain.Driven.Design.Domain.GymAggregate;
 
 namespace Domain.Driven.Design.Tests.Unit.Factories;
 

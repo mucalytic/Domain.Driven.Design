@@ -1,8 +1,9 @@
+using Domain.Driven.Design.Domain.SessionAggregate;
+using Domain.Driven.Design.Domain.Common.Entities;
 using Domain.Driven.Design.Domain.Common;
-using Domain.Driven.Design.Domain.Errors;
 using ErrorOr;
 
-namespace Domain.Driven.Design.Domain.Entities;
+namespace Domain.Driven.Design.Domain.TrainerAggregate;
 
 public class Trainer(Guid userId, Schedule? schedule = null, Guid? id = null) : GuidEntity(id)
 {

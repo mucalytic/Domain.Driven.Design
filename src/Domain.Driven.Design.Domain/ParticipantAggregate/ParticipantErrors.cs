@@ -1,6 +1,6 @@
 using ErrorOr;
 
-namespace Domain.Driven.Design.Domain.Errors;
+namespace Domain.Driven.Design.Domain.ParticipantAggregate;
 
 public static class ParticipantErrors
 {

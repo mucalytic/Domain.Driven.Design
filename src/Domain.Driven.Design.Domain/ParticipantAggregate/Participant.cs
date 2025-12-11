@@ -1,10 +1,11 @@
+using Domain.Driven.Design.Domain.SessionAggregate;
+using Domain.Driven.Design.Domain.Common.Entities;
 using Domain.Driven.Design.Domain.Common;
-using Domain.Driven.Design.Domain.Errors;
 using ErrorOr;
 
-namespace Domain.Driven.Design.Domain.Entities;
+namespace Domain.Driven.Design.Domain.ParticipantAggregate;
 
-public class Participant(Guid userId, Guid? id = null) : GuidEntity(id)
+public class Participant(Guid userId, Guid? id = null) : AggregateRoot(id)
 {
     private readonly Schedule _schedule = Schedule.Empty();
     private readonly List<Guid> _sessionIds = [];

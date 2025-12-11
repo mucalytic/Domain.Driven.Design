@@ -1,6 +1,6 @@
 using ErrorOr;
 
-namespace Domain.Driven.Design.Domain.Errors;
+namespace Domain.Driven.Design.Domain.SessionAggregate;
 
 public static class SessionErrors
 {

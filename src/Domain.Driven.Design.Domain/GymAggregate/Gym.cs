@@ -1,10 +1,10 @@
+using Domain.Driven.Design.Domain.RoomAggregate;
 using Domain.Driven.Design.Domain.Common;
-using Domain.Driven.Design.Domain.Errors;
 using ErrorOr;
 
-namespace Domain.Driven.Design.Domain.Entities;
+namespace Domain.Driven.Design.Domain.GymAggregate;
 
-public class Gym(int maxRooms, Guid subscriptionId, Guid? id = null) : GuidEntity(id)
+public class Gym(int maxRooms, Guid subscriptionId, Guid? id = null) : AggregateRoot(id)
 {
     private readonly List<Guid> _roomIds = [];
 

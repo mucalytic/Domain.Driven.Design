@@ -1,6 +1,6 @@
 using Ardalis.SmartEnum;
 
-namespace Domain.Driven.Design.Domain.ValueObjects;
+namespace Domain.Driven.Design.Domain.SubscriptionAggregate;
 
 public class SubscriptionType(string name, int value) : SmartEnum<SubscriptionType>(name, value)
 {

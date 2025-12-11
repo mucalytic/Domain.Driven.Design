@@ -1,8 +1,7 @@
-using Domain.Driven.Design.Domain.ValueObjects;
-using Domain.Driven.Design.Domain.Common;
+using Domain.Driven.Design.Domain.Common.ValueObjects;
 using ErrorOr;
 
-namespace Domain.Driven.Design.Domain.Entities;
+namespace Domain.Driven.Design.Domain.Common.Entities;
 
 public class Schedule(Dictionary<DateOnly, List<TimeRange>>? calendar = null, Guid? id = null) : GuidEntity(id)
 {

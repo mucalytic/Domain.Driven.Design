@@ -1,4 +1,4 @@
-namespace Domain.Driven.Design.Domain.Interfaces;
+namespace Domain.Driven.Design.Domain.Common.Interfaces;
 
 public interface IDateTimeProvider
 {

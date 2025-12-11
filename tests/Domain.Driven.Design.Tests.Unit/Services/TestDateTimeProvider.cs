@@ -1,4 +1,4 @@
-using Domain.Driven.Design.Domain.Interfaces;
+using Domain.Driven.Design.Domain.Common.Interfaces;
 
 namespace Domain.Driven.Design.Tests.Unit.Services;
 

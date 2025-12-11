@@ -1,8 +1,7 @@
-using Domain.Driven.Design.Domain.Common;
 using ErrorOr;
 using Throw;
 
-namespace Domain.Driven.Design.Domain.ValueObjects;
+namespace Domain.Driven.Design.Domain.Common.ValueObjects;
 
 public class TimeRange(TimeOnly start, TimeOnly end) : ValueObject<TimeRange>
 {

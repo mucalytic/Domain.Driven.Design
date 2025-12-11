@@ -1,15 +1,14 @@
-using Domain.Driven.Design.Domain.ValueObjects;
-using Domain.Driven.Design.Domain.Interfaces;
+using Domain.Driven.Design.Domain.ParticipantAggregate;
+using Domain.Driven.Design.Domain.Common.ValueObjects;
+using Domain.Driven.Design.Domain.Common.Interfaces;
 using Domain.Driven.Design.Domain.Common;
-using Domain.Driven.Design.Domain.Errors;
 using ErrorOr;
 
-namespace Domain.Driven.Design.Domain.Entities;
+namespace Domain.Driven.Design.Domain.SessionAggregate;
 
-public class Session(DateOnly date, TimeRange time, int maxParticipants, Guid trainerId, Guid? id = null) : GuidEntity(id)
+public class Session(DateOnly date, TimeRange time, int maxParticipants, Guid trainerId, Guid? id = null) : AggregateRoot(id)
 {
     private readonly List<Reservation> _reservations = [];
-    private readonly Guid _trainerId = trainerId;
 
     public DateOnly Date  { get; } = date;
     public TimeRange Time { get; } = time;

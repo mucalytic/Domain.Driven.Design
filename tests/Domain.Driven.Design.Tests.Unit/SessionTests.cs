@@ -1,6 +1,6 @@
+using Domain.Driven.Design.Domain.SessionAggregate;
 using Domain.Driven.Design.Tests.Unit.Factories;
 using Domain.Driven.Design.Tests.Unit.Services;
-using Domain.Driven.Design.Domain.Errors;
 using FluentAssertions;
 
 namespace Domain.Driven.Design.Tests.Unit;

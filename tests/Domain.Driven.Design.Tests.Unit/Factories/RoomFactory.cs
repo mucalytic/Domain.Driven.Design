@@ -1,4 +1,4 @@
-using Domain.Driven.Design.Domain.Entities;
+using Domain.Driven.Design.Domain.RoomAggregate;
 
 namespace Domain.Driven.Design.Tests.Unit.Factories;
 

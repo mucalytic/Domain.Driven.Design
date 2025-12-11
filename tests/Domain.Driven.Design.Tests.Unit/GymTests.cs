@@ -1,5 +1,5 @@
 using Domain.Driven.Design.Tests.Unit.Factories;
-using Domain.Driven.Design.Domain.Errors;
+using Domain.Driven.Design.Domain.GymAggregate;
 using FluentAssertions;
 
 namespace Domain.Driven.Design.Tests.Unit;
